@@ -1,0 +1,52 @@
+{
+    "name": "asyncapi-cpp-template",
+    "version": "0.0.1",
+    "description": "A template that generates a C++ client using MQTT.",
+    "generator": {
+        "renderer": "react",
+        "apiVersion": "v1",
+        "generator": ">=1.10.0 <2.0.0",
+        "supportedProtocols": [
+            "mqtt",
+            "kafka",
+            "ws",
+            "secure-mqtt"
+        ],
+        "parameters": {
+            "initializeEnum": {
+                "description": "Initialize or not initialize Enum with values",
+                "default": "false",
+                "required": false
+            },
+            "protocol": {
+                "description": "Protocol for the generated client, the supported protocols are: mqtt, secure-mqtt, kafka and ws. The default is mqtt",
+                "default": "mqtt",
+                "required": false
+            }
+        }
+    },
+    "dependencies": {
+        "@asyncapi/generator-react-sdk": "^0.2.25",
+        "@asyncapi/modelina": "^1.8.10",
+        "@asyncapi/parser": "^2.1.0"
+    },
+    "devDependencies": {
+        "@angular/core": "^16.2.0",
+        "clang-format": "^1.8.0",
+        "ngx-mqtt": "^16.1.0",
+        "prettier": "^2.8.8",
+        "rimraf": "^5.0.0",
+        "typescript": "^5.1.6",
+        "vinyl": "^3.0.0"
+    },
+    "config": {
+        "outputDir": "./output",
+        "spec1": "./specs/edscorbot-async-api.yml",
+        "spec2": "./specs/asyncapi.yml"
+    },
+    "scripts": {
+        "generate": "ag $npm_package_config_spec1 ./ --output $npm_package_config_outputDir --force-write",
+        "typescript-transpile": "npx tsc $npm_package_config_outputDir/**/*.ts --outDir $npm_package_config_outputDir/client-js",
+        "prettier-format": "prettier --write $npm_package_config_outputDir/**/*.ts --config ./.prettierrc"
+    }
+}
