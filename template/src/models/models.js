@@ -1,6 +1,8 @@
 import { File, Text } from "@asyncapi/generator-react-sdk"
-import { CplusplusFileGenerator, FormatHelpers, TS_COMMON_PRESET, ConstrainedEnumModel } from '@asyncapi/modelina';
+import { CplusplusFileGenerator, FormatHelpers, TS_COMMON_PRESET, ConstrainedEnumModel, ConstrainedReferenceModel, ConstrainedAnyModel, ConstrainedArrayModel, ConstrainedUnionModel } from '@asyncapi/modelina';
 import EnumComponent from '../../../components/EnumComponent';
+import { removeOptional } from "../../../util/stringUtil";
+import ModelPreset from "../../../components/model/ModelPreset";
 
 /**
  * @typedef TemplateParameters
@@ -14,28 +16,7 @@ import EnumComponent from '../../../components/EnumComponent';
 export default async function Models({asyncapi, params}) {
     const cPPGenerator = new CplusplusFileGenerator({
         namespace: "asyncapi_client",
-        presets: [
-            {
-                class: {
-                    self({ renderer, content }) {
-                        renderer.dependencyManager.addDependency(`#include <nlohmann/json.hpp>`);
-                        renderer.dependencyManager.addDependency(`using json = nlohmann::json;`);
-                        return content;
-                    },
-                    additionalContent({content,model}) {
-                        return `${content}
-                        static ${model.name} from_json_string(std::string json_string)
-                        {
-                            json json_obj = json::parse(json_string);
-
-                            ${model.name} result = ${model.name}();
-                            
-                            return result;
-                        }`
-                    }
-                }
-            }
-        ]
+        presets: [ModelPreset()]
     });
 
     const generatedModels = await cPPGenerator.generateCompleteModels(

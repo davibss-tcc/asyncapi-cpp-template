@@ -14,3 +14,17 @@ export function toSnakeCase(text) {
                  .join('_');
     return result;
 }
+
+/**
+ * 
+ * @param {string} text 
+ * @returns string
+ */
+export function removeOptional(text) {
+    let result = text;
+    if (result.includes("optional")) {
+        const regex = /(?<=std::optional<)(.*)(?=>)/g;
+        result = text.match(regex)[0];
+    }
+    return result;
+}

@@ -28,6 +28,7 @@ export default function CommunicationLayerImplComponent(channels) {
 ${topicConstants.map(topicConstant => {
     return `#include "../models/${topicConstant[2]}.hpp"`
 }).join("\n")}
+using namespace asyncapi_client;
 
 class CommunicationLayerImpl : public CommunicationLayer {
 public:
@@ -41,7 +42,7 @@ public:
             {
                 try
                 {
-                  asyncapi_client::${topicConstant[2]}::from_json_string((char *)message->payload);
+                  ${topicConstant[2]} obj = ${topicConstant[2]}::from_json_string((char *)message->payload);
                   //TODO implement your business code
                   std::cout << "handle_${topicConstant[1]}_topic" << std::endl;
                 }
