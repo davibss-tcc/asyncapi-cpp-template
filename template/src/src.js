@@ -1,5 +1,8 @@
 import { AsyncAPIDocument } from '@asyncapi/parser';
 import Models from './models/models';
+import Topics from './services/topics';
+import CommunicationLayer from './services/communicationLayer';
+import CommunicationLayerImpl from './services/communicationLayerImpl';
 
 /**
  * @typedef TemplateParameters
@@ -12,6 +15,9 @@ import Models from './models/models';
  */
 export default function Src({ asyncapi, params }) {
   return [
-    <Models />
+    <Models />,
+    <Topics />,
+    <CommunicationLayer />,
+    <CommunicationLayerImpl />
   ];
 }

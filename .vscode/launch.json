@@ -14,7 +14,7 @@
                 "./specs/edscorbot-async-api.yml",
                 "./",
                 "--output",
-                "./output",
+                "./output/client",
                 // "--install",
                 "--force-write"
             ],

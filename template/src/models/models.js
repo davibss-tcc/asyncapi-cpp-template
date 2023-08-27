@@ -13,10 +13,35 @@ import EnumComponent from '../../../components/EnumComponent';
  */
 export default async function Models({asyncapi, params}) {
     const cPPGenerator = new CplusplusFileGenerator({
-        namespace: "asyncapi_client"
+        namespace: "asyncapi_client",
+        presets: [
+            {
+                class: {
+                    self({ renderer, content }) {
+                        renderer.dependencyManager.addDependency(`#include <nlohmann/json.hpp>`);
+                        renderer.dependencyManager.addDependency(`using json = nlohmann::json;`);
+                        return content;
+                    },
+                    additionalContent({content,model}) {
+                        return `${content}
+                        static ${model.name} from_json_string(std::string json_string)
+                        {
+                            json json_obj = json::parse(json_string);
+
+                            ${model.name} result = ${model.name}();
+                            
+                            return result;
+                        }`
+                    }
+                }
+            }
+        ]
     });
 
-    const generatedModels = await cPPGenerator.generateCompleteModels(asyncapi, {moduleSystem: 'ESM'});
+    const generatedModels = await cPPGenerator.generateCompleteModels(
+        asyncapi, 
+        {moduleSystem: 'ESM'}
+    );
     const files = [];
     generatedModels.forEach(generatedModel => {
         const modelFileName = `${FormatHelpers.toSnakeCase(generatedModel.modelName)}.hpp`;

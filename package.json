@@ -40,7 +40,7 @@
         "vinyl": "^3.0.0"
     },
     "config": {
-        "outputDir": "./output",
+        "outputDir": "./output/client",
         "spec1": "./specs/edscorbot-async-api.yml",
         "spec2": "./specs/asyncapi.yml"
     },

@@ -16,12 +16,15 @@ export default function SimulatedServerComponent(servers) {
     }
 
     return (
-        <File name="simulated_server.cpp">
+        <File name="simulated-server.cpp">
             <Text>
                 {`
 #include <signal.h>
+#include <stdint.h>
+#include <string.h>
 #include "./services/communication-layer-impl.cpp"
-
+#include <mosquitto.h>
+#include <unistd.h>
 
 #define DEFAULT_SLEEP 125000 //microseconds
 

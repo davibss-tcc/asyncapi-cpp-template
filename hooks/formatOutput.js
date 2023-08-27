@@ -10,12 +10,14 @@ const formatAllOutputFiles = function(dirPath) {
       if (fs.statSync(filePath).isDirectory()) {
         formatAllOutputFiles(filePath);
       } else {
-        var vinylFile = new Vinyl({
+        if (file.endsWith(".cpp") || file.endsWith(".hpp")) {
+          var vinylFile = new Vinyl({
             path: filePath
-        });
-        const stream = await clangFormat(vinylFile, "utf-8", "WebKit", () => {});
-        const writable = fs.createWriteStream(filePath);
-        stream.pipe(writable);
+          });
+          const stream = await clangFormat(vinylFile, "utf-8", "WebKit", () => {});
+          const writable = fs.createWriteStream(filePath);
+          stream.pipe(writable);
+        }
       } 
     });
   };
@@ -26,6 +28,7 @@ const formatAllOutputFiles = function(dirPath) {
 module.exports = {
     'generate:after': (generator) => {
         let pathToDir = path.resolve(generator.targetDir, '');
-        formatAllOutputFiles(pathToDir);
+        let srcDir = path.join(pathToDir, 'src');
+        formatAllOutputFiles(srcDir);
     }
 };
