@@ -25,6 +25,7 @@ export default function CommunicationLayerImplComponent(channels) {
             <Text>
 {`
 #include "communication-layer.cpp"
+#include "topics-impl.cpp"
 ${topicConstants.map(topicConstant => {
     return `#include "../models/${topicConstant[2]}.hpp"`
 }).join("\n")}
@@ -66,7 +67,7 @@ CommunicationLayerImpl impl;
 void message_callback(struct mosquitto* mosq, void* obj, const struct mosquitto_message* message)
 {
     ${topicConstants.map(topicConstant => { return `
-        if (std::strcmp(message->topic, ${topicConstant[0]}.c_str()) == 0) {
+        if (std::strcmp(message->topic, topicsImpl.${topicConstant[0]}.c_str()) == 0) {
             impl.handle_${topicConstant[1]}_topic(message);
         }   
     `}).join("\n")}

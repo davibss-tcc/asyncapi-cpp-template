@@ -1,5 +1,5 @@
 import { ConstrainedAnyModel, ConstrainedArrayModel, ConstrainedUnionModel, CplusplusPreset } from "@asyncapi/modelina";
-import { removeOptional } from "../../util/stringUtil";
+import { removeOptional, toSnakeCase } from "../../util/stringUtil";
 
 /**
  * 
@@ -8,9 +8,18 @@ import { removeOptional } from "../../util/stringUtil";
 export default function ModelPreset(){
     return { 
         class: {
-            self({ renderer, content, model, options, inputModel }) {
+            self({ renderer, content, model }) {
                 renderer.dependencyManager.addDependency(`#include <nlohmann/json.hpp>`);
                 renderer.dependencyManager.addDependency(`using json = nlohmann::json;`);
+                const paramsToMacro = [];
+                paramsToMacro.push(model.name);
+                Object.entries(model.properties).map(entry => {
+                    paramsToMacro.push(entry[0]);
+                });
+                return `
+                    ${content}
+                    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(${paramsToMacro.join(", ")})    
+                `;
                 return `
                 void from_json(const json& j, ${model.type}& ${model.name}) {
                     ${Object.entries(model.properties)
@@ -20,9 +29,12 @@ export default function ModelPreset(){
                             return `${model.name}.${entry[0]} = j.at("${entry[0]}").get<${castType}>();`
                         }).join("\n")}
                 }
-                ${content}`;
+                ${content}
+                NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(${paramsToMacro.join(", ")})
+                `;
             },
-            additionalContent({content,model}) {
+            additionalContent({ content, model }) {
+
                 return `${content}
                 static ${model.name} from_json_string(std::string json_string)
                 {
@@ -41,7 +53,7 @@ export default function ModelPreset(){
                     return result;
                 }`
             },
-            property({model, property, content}) {
+            property({ property, content, model }) {
                 if (property.property instanceof ConstrainedArrayModel) {
                     let arrayType = "";
                     if (property.property.valueModel instanceof ConstrainedUnionModel) {
@@ -49,11 +61,14 @@ export default function ModelPreset(){
                             .filter(constrained => !(constrained instanceof ConstrainedAnyModel))[0];
                         arrayType = constrainedRefModel.type;
                         arrayType = removeOptional(arrayType);
-                        property.property.type = `std::optional<std::vector<${arrayType}>>`;
+                        property.property.type = `std::vector<${arrayType}>`;
                     }
-                    return `std::optional<std::vector<${arrayType}>> ${property.propertyName};`
+                    return `std::vector<${arrayType}> ${property.propertyName};`
                 }
                 return content;
+            },
+            getter(args) {
+                console.log(args);
             }
         }
     };

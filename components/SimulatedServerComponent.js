@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		rc = mosquitto_connect(mosq, mqtt_host, mqtt_port, 60);
 
 		//subscribe on all relevant topics
-        subscribe_all_topics();
+        topicsImpl.subscribe_all_topics();
 
 		//publishes the metainfo of the robot
 		//MetaInfoObject mi = initial_metainfo();
