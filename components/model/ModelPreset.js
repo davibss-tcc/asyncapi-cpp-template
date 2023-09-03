@@ -20,18 +20,6 @@ export default function ModelPreset(){
                     ${content}
                     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(${paramsToMacro.join(", ")})    
                 `;
-                return `
-                void from_json(const json& j, ${model.type}& ${model.name}) {
-                    ${Object.entries(model.properties)
-                        .filter(entry => entry[0] !== "additional_properties")
-                        .map(entry => {
-                            let castType = removeOptional(entry[1].property.type);                                    
-                            return `${model.name}.${entry[0]} = j.at("${entry[0]}").get<${castType}>();`
-                        }).join("\n")}
-                }
-                ${content}
-                NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(${paramsToMacro.join(", ")})
-                `;
             },
             additionalContent({ content, model }) {
 
@@ -48,7 +36,7 @@ export default function ModelPreset(){
                         })
                         .map(([k,prop]) => {
                             let castType = removeOptional(prop.property.type);                                    
-                            return `result.${prop.propertyName} = json_obj['${prop.propertyName}'].get<${castType}>();`
+                            return `if (json_obj.contains("${prop.propertyName}")) { json_obj.at("${prop.propertyName}").get_to(result.${prop.propertyName}); }`;
                         }).join("\n")}
                     return result;
                 }`

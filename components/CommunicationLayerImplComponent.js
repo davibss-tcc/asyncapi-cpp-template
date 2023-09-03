@@ -37,7 +37,6 @@ public:
         void handle_${topicConstant[1]}_topic(const struct mosquitto_message* message)
         {
             // TODO implement your business code
-            std::cout << "handle_${topicConstant[1]}_topic" << std::endl;
 
             if ((char *)message->payload != NULL)    
             {

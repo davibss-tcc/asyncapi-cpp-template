@@ -18,6 +18,7 @@ export default function TopicsComponent(channels) {
         <File name="topics.cpp">
             <Text>
 {`
+#pragma once
 #include "mosquitto.h"
 #include <iostream>
 
