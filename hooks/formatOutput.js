@@ -24,7 +24,7 @@ const formatAllOutputFiles = function(dirPath) {
   });
 };
 
-const removeUnnecessaryFiles = function() {
+const removeUnnecessaryFiles = function(dirPath) {
   rimraf(dirPath, {
     preserveRoot: false,
     filter: (filePath, ent) => {
@@ -45,7 +45,7 @@ const zipFiles = function(dirPath) {
 
   output.on('close', () => {
     console.log('Zip file is ready.');
-    removeUnnecessaryFiles();
+    removeUnnecessaryFiles(dirPath);
   });
 
   archive.on('error', (err) => {
