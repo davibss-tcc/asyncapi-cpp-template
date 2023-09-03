@@ -53,7 +53,7 @@ const zipFiles = function(dirPath) {
   });
 
   archive.pipe(output);
-  archive.glob("**/!(*.zip)", { cwd: dirPath })
+  archive.glob("**/!(*.zip)", { cwd: dirPath, dot: true })
 
   archive.finalize();
 }
