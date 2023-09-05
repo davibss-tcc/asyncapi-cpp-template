@@ -18,11 +18,14 @@ export default function ModelPreset(){
                 });
                 return `
                     ${content}
-                    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(${paramsToMacro.join(", ")})    
                 `;
             },
             additionalContent({ content, model }) {
-
+                const paramsToMacro = [];
+                paramsToMacro.push(model.name);
+                Object.entries(model.properties).map(entry => {
+                    paramsToMacro.push(entry[0]);
+                });
                 return `${content}
                 static ${model.name} from_json_string(std::string json_string)
                 {
@@ -39,7 +42,16 @@ export default function ModelPreset(){
                             return `if (json_obj.contains("${prop.propertyName}")) { json_obj.at("${prop.propertyName}").get_to(result.${prop.propertyName}); }`;
                         }).join("\n")}
                     return result;
-                }`
+                }
+
+                static std::string to_json_string(${model.name} ${model.name})
+                {
+                    json json_obj = ${model.name};
+                    return json_obj.dump();
+                }
+
+                NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(${paramsToMacro.join(", ")})
+                `
             },
             property({ property, content, model }) {
                 if (property.property instanceof ConstrainedArrayModel) {
