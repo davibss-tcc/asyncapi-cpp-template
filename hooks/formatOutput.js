@@ -40,7 +40,8 @@ const zipFiles = async function(dirPath) {
   const output = fs.createWriteStream(path.join(dirPath, zipFileName));
 
   const archive = archiver('zip', {
-    zlib: { level: 9 } 
+    zlib: { level: 9 },
+    forceLocalTime: true
   });
 
   output.on('close', () => {
