@@ -44,7 +44,8 @@ public:
                 {
                   ${topicConstant[2]} obj = ${topicConstant[2]}::from_json_string((char *)message->payload);
                   //TODO implement your business code
-                  std::cout << "handle_${topicConstant[1]}_topic" << std::endl;
+                  std::string unstructured = ${topicConstant[2]}::to_json_string(obj); 
+                  std::cout << "[Topic: ${topicConstant[1]}] => Handled message: " << unstructured << std::endl;
                 }
                 catch (std::exception& e)
                 {
