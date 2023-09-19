@@ -58,6 +58,11 @@ const zipFiles = async function(dirPath) {
   await archive.finalize();
 }
 
+function addPermissionToBuildFile(outputDir) {
+  const buildFilePath = path.join(outputDir, 'mosquitto_build.sh');
+  fs.chmodSync(buildFilePath, 0o777);
+}
+
 /**
  * Format all source files with indentations and new lines
  */
@@ -65,6 +70,7 @@ module.exports = {
     'generate:after': async (generator) => {
         let pathToDir = path.resolve(generator.targetDir, '');
         let srcDir = path.join(pathToDir, 'src');
+        addPermissionToBuildFile(pathToDir);
         formatAllOutputFiles(srcDir);
         if (generator.templateParams.zip === "true") {
           await zipFiles(pathToDir);
