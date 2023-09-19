@@ -61,7 +61,9 @@ const zipFiles = async function(dirPath) {
 
 function addPermissionToBuildFile(outputDir) {
   const buildFilePath = path.join(outputDir, 'mosquitto_build.sh');
-  fs.chmodSync(buildFilePath, 0o777);
+  if (fs.existsSync(buildFilePath)) {
+    fs.chmodSync(buildFilePath, 0o777);
+  }
 }
 
 /**

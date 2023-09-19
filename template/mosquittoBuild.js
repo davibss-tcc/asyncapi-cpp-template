@@ -1,9 +1,11 @@
 import { File, Text } from "@asyncapi/generator-react-sdk"
 
-export default function MosquittoBuild() {
-    return (
-        <File name="mosquitto_build.sh">
-            <Text>
+export default function MosquittoBuild({params}) {
+    const files = [];
+    if (params.onlySourceFiles === "false") {
+        files.push(
+<File name="mosquitto_build.sh">
+    <Text>
 {`#!/bin/bash
 
 cd ../
@@ -19,7 +21,9 @@ make -j4 >> script_log.txt
 ls -l lib >> script_log.txt
 mkdir -p ../../lib >> script_log.txt
 cp lib/libmosquitto_static.a ../../lib/libmosquitto_static.a >> script_log.txt`}
-            </Text>
-        </File>
-    )
+    </Text>
+</File>
+        );
+    }
+    return files;
 }

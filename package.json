@@ -27,6 +27,11 @@
                 "description": "Boolean value to zip file or not",
                 "default": "false",
                 "required": false
+            },
+            "onlySourceFiles": {
+                "description": "Boolean value to specify if user wants an entire application or just the source files",
+                "default": "false",
+                "required": false
             }
         }
     },

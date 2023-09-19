@@ -3,6 +3,7 @@ import GitIgnore from './gitIgnore';
 import CMakeList from './cmakeList';
 import MosquittoBuild from './mosquittoBuild';
 import Src from './src/src';
+import MosquittoConf from './mosquitto.conf';
 
 /**
  * @typedef TemplateParameters
@@ -18,6 +19,7 @@ export default function ({ asyncapi, params }) {
     <GitIgnore />,
     <CMakeList />,
     <MosquittoBuild />,
+    <MosquittoConf />,
     <Src asyncapi={asyncapi} params={params} />
   ];
 }

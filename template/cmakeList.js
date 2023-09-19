@@ -1,9 +1,11 @@
 import { File, Text } from "@asyncapi/generator-react-sdk"
 
-export default function CMakeList() {
-    return (
-        <File name="CMakeLists.txt">
-            <Text>
+export default function CMakeList({params}) {
+    const files = [];
+    if (params.onlySourceFiles === "false") {
+        files.push(
+<File name="CMakeLists.txt">
+    <Text>
 {`cmake_minimum_required(VERSION 3.10)
 project(simulated_edscorbot_runtime)
 
@@ -30,5 +32,7 @@ TARGET_LINK_LIBRARIES(simulated_server PRIVATE  "\${CMAKE_CURRENT_SOURCE_DIR}/li
 SET(CMAKE_BUILD_TYPE "Debug")`}
             </Text>
         </File>
-    )
+);
+    }
+    return files;
 }
