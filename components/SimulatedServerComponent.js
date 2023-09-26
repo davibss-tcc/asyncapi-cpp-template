@@ -1,15 +1,13 @@
 import { AsyncAPIDocument, Server } from "@asyncapi/parser";
 import { File, Text } from "@asyncapi/generator-react-sdk";
+import { getChoosedServerHost } from "../util/asyncApiUtil";
 
 /**
  * 
  * @param {Server[]} servers 
  */
-export default function SimulatedServerComponent(servers) {
-
-    const choosedServer = servers[0];
-
-    let host = choosedServer.url() ?? "localhost";
+export default function SimulatedServerComponent(servers, params) {
+    let host = getChoosedServerHost(servers, params);
     let port = 1883;
     if(host.includes(":")) {
         [host, port] = host.split(":");

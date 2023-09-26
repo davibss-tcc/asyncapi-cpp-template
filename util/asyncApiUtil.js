@@ -1,4 +1,4 @@
-import { Channel } from '@asyncapi/parser';
+import { Channel, Server } from '@asyncapi/parser';
 import { toSnakeCase } from '../util/stringUtil';
 
 /**
@@ -21,4 +21,26 @@ export function extractSubscribeSchemaFromChannel(channel, snakeCase = false) {
     }
 
     return schema;
+}
+
+/**
+ * @typedef TemplateParameters
+ * @type {object}
+ */
+/**
+ * 
+ * @param {Server[]} servers 
+ * @param {TemplateParameters} params 
+ */
+export function getChoosedServerHost(servers, params) {
+    var result = '127.0.0.1';
+    var choosedServer = params.choosedServer;
+    if (choosedServer !== 'default') {
+        if (servers.length > 0) {
+            if (servers.find(server => server.id() === choosedServer)) {
+                result = servers.filter(server => server.id() === choosedServer)[0].url();
+            }
+        }
+    }
+    return result;
 }

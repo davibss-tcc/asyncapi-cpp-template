@@ -7,9 +7,9 @@ import { AsyncAPIDocument } from "@asyncapi/parser";
  * @param {{asyncapi: AsyncAPIDocument}} _ 
  * @returns 
  */
-export default function SimulatedServer({asyncapi}) {
+export default function SimulatedServer({asyncapi, params}) {
 
     const servers = asyncapi.servers().collections;
 
-    return SimulatedServerComponent(servers);
+    return SimulatedServerComponent(servers, params);
 }

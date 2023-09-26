@@ -32,6 +32,11 @@
                 "description": "Boolean value to specify if user wants an entire application or just the source files",
                 "default": "false",
                 "required": false
+            },
+            "choosedServer": {
+                "description": "Choosed server from AsyncAPI specification. Value is 127.0.0.1 if not passed",
+                "default": "default",
+                "required": false
             }
         }
     },
