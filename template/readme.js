@@ -27,6 +27,18 @@ In this root folder:
 3. Choose the \`g++\` option
 2. Click in the bottom button in VSCode: **Launch the selected target in the terminal window [simulated_server]**
 
+## Using mosquitto.conf
+In this generated project you'll see a \`mosquitto.conf\` file. Use this file to initiate your *Mosquitto* message broker.
+### Options
+1. Copy the \`mosquitto.conf\` file to \`/etc/mosquitto/conf.d\`
+\`\`\`sh
+cp mosquitto.conf /etc/mosquitto/conf.d
+\`\`\`
+2. Start \`Mosquitto\` message broker with this file
+\`\`\`sh
+mosquitto -c mosquitto.conf
+\`\`\`
+
 ## Changing the hostname
 In the \`src/simulated_server.cpp\` file you can change this line to be the host you need.
 \`\`\`cpp
