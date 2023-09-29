@@ -26,7 +26,12 @@ export default function ModelPreset(){
                 Object.entries(model.properties).map(entry => {
                     paramsToMacro.push(entry[0]);
                 });
-                return `${content}
+                const publisherIdFound = Object.keys(model.properties).find((value) => value === "publisher_id");
+
+                return `\
+                ${content}
+                ${publisherIdFound ? "" : "std::string publisher_id;"}
+
                 static ${model.name} from_json_string(std::string json_string)
                 {
                     json json_obj = json::parse(json_string);
@@ -41,6 +46,11 @@ export default function ModelPreset(){
                             let castType = removeOptional(prop.property.type);                                    
                             return `if (json_obj.contains("${prop.propertyName}")) { json_obj.at("${prop.propertyName}").get_to(result.${prop.propertyName}); }`;
                         }).join("\n")}
+                    ${publisherIdFound ? "" : `\
+                    if (json_obj.contains("publisher_id")) {
+                        json_obj.at("publisher_id").get_to(result.publisher_id);
+                    }`}
+
                     return result;
                 }
 
@@ -50,7 +60,7 @@ export default function ModelPreset(){
                     return json_obj.dump();
                 }
 
-                NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(${paramsToMacro.join(", ")})
+                NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(${paramsToMacro.join(", ")}${publisherIdFound ? "" : ", publisher_id"})
                 `
             },
             property({ property, content, model }) {

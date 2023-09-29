@@ -51,8 +51,12 @@ If your specification has changed you can generate again the main code using thi
 \`\`\`sh
 ag {spec_file_path} https://github.com/davibss-tcc/asyncapi-cpp-template -o ./ --force-write -p {your_params}
 \`\`\`
-**CAUTION!!** This operation will change almost all files, except by \`src/services/communication-layer-impl.cpp\` and \
-\`src/services/topics-impl.cpp\`. If the overwritten changes break this files you'll have to fix by yourself. To overwrite \
+**CAUTION!!** This operation will change almost all files, except the files below: 
+* \`src/services/communication-layer-impl.cpp\` 
+* \`src/services/topics-impl.cpp\`. 
+* \`src/simulated-server-info.cpp\`
+
+If the overwritten changes break this files you'll have to fix by yourself. To overwrite \
 this special files you would have to delete them and then generate again.
 `}
     </Text>

@@ -26,6 +26,7 @@ export default function CommunicationLayerImplComponent(channels) {
 {`
 #include "communication-layer.cpp"
 #include "topics-impl.cpp"
+#include "../simulated-server-info.cpp"
 ${topicConstants.map(topicConstant => {
     return `#include "../models/${topicConstant[2]}.hpp"`
 }).join("\n")}
@@ -37,15 +38,19 @@ public:
         void handle_${topicConstant[1]}_topic(const struct mosquitto_message* message)
         {
             // TODO implement your business code
-
             if ((char *)message->payload != NULL)    
             {
                 try
                 {
-                  ${topicConstant[2]} obj = ${topicConstant[2]}::from_json_string((char *)message->payload);
                   //TODO implement your business code
-                  std::string unstructured = ${topicConstant[2]}::to_json_string(obj); 
+                  ${topicConstant[2]} obj = ${topicConstant[2]}::from_json_string((char *)message->payload);
+                  std::string unstructured = ${topicConstant[2]}::to_json_string(obj);
                   std::cout << "[Topic: ${topicConstant[1]}] => Handled message: " << unstructured << std::endl;
+                  if (obj.publisher_id == "" || obj.publisher_id != simulated_server_info::client_id) {
+                    obj.publisher_id = simulated_server_info::client_id;
+                    std::string unstructured_publish_message = ${topicConstant[2]}::to_json_string(obj);
+                    publish_message("${topicConstant[1]}", unstructured_publish_message.c_str());
+                  }
                 }
                 catch (std::exception& e)
                 {
