@@ -49,7 +49,7 @@ public:
                   if (obj.publisher_id == "" || obj.publisher_id != simulated_server_info::client_id) {
                     obj.publisher_id = simulated_server_info::client_id;
                     std::string unstructured_publish_message = ${topicConstant[2]}::to_json_string(obj);
-                    publish_message("${topicConstant[1]}", unstructured_publish_message.c_str());
+                    publish_message(topicsImpl.${topicConstant[0]}.c_str(), unstructured_publish_message.c_str());
                   }
                 }
                 catch (std::exception& e)
