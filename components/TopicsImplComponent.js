@@ -23,11 +23,6 @@ export default function TopicsImplComponent(channels) {
 
 class TopicsLayerImpl: public TopicsLayer {
 public:
-
-    ${topicConstants.map(topicConstant => {
-        return `std::string ${topicConstant[0]} = "${topicConstant[1]}";`
-    }).join("\n")}
-
     void subscribe_all_topics()
     {
         ${topicConstants.map(topicConstant => {
